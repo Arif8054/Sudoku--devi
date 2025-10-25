@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+int islemSayisi = 0;
 
 void sudokuYazdir(int cozulecekSudoku[9][9]){
     for (int satir = 0; satir < 9; satir++){
@@ -18,7 +19,7 @@ void sudokuYazdir(int cozulecekSudoku[9][9]){
 
 
 int sudokuKontrol(int cozulecekSudoku[9][9],int satir,int sutun,int sayi){
-
+    islemSayisi++;
     // satir kontrol 
     for (int i = 0; i < 9; i++)
     {
@@ -109,11 +110,14 @@ int main(){
 };
 
     sudokuYazdir(cozulecekSudoku);
+    islemSayisi = 0;
 
     if (sudokuCoz(cozulecekSudoku)) {
         printf("Sudoku Başariyla Çözüldü:\n\n\n");
-        printf("----------------\n");
+        printf("Toplam işlem sayisi: %d\n", islemSayisi);
         sudokuYazdir(cozulecekSudoku);
+    }else {
+        printf("Cozum bulunamadi. \n\n");
     }
 
     return 0;
