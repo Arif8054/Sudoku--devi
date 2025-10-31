@@ -4,10 +4,10 @@
 
 int islemSayisi = 0;
 
-void sudokuYazdir(int cozulecekSudoku[9][9]){
+void sudokuYazdir(int sudokuUretilen[9][9]){
     for (int satir = 0; satir < 9; satir++){
         for (int sutun  = 0; sutun < 9; sutun++){
-            printf("%d",cozulecekSudoku[satir][sutun]);
+            printf("%d",sudokuUretilen[satir][sutun]);
             if ((sutun + 1 )% 3 == 0){
                 printf(" | ");
             }
@@ -20,12 +20,12 @@ void sudokuYazdir(int cozulecekSudoku[9][9]){
 }
 
 
-int sudokuKontrol(int cozulecekSudoku[9][9],int satir,int sutun,int sayi){
+int sudokuKontrol(int sudokuUretilen[9][9],int satir,int sutun,int denenenSayi){
     islemSayisi++;
     // satir kontrol 
     for (int i = 0; i < 9; i++)
     {
-        if (cozulecekSudoku[satir][i] == sayi)
+        if (sudokuUretilen[satir][i] == denenenSayi)
         {
             return 0;
         }
@@ -35,7 +35,7 @@ int sudokuKontrol(int cozulecekSudoku[9][9],int satir,int sutun,int sayi){
 
     for (int i = 0; i < 9; i++)
     {
-        if (cozulecekSudoku[i][sutun] == sayi)
+        if (sudokuUretilen[i][sutun] == denenenSayi)
         {
             return 0;
         }
@@ -63,7 +63,7 @@ int sudokuKontrol(int cozulecekSudoku[9][9],int satir,int sutun,int sayi){
 
     for (int i = 0; i < 3; i++){
         for (int j = 0; j < 3; j++){
-            if (cozulecekSudoku[baslangicSatir + i ][baslangicSutun +j] == sayi){
+            if (sudokuUretilen[baslangicSatir + i ][baslangicSutun +j] == denenenSayi){
                 return 0;
             }
         }
@@ -73,18 +73,18 @@ int sudokuKontrol(int cozulecekSudoku[9][9],int satir,int sutun,int sayi){
 
 
 
-int sudokuCoz(int cozulecekSudoku[9][9]){
+int sudokuCoz(int sudokuUretilen[9][9]){
 
     for (int satir = 0; satir < 9; satir++){
         for (int sutun = 0; sutun < 9; sutun++){
-            if (cozulecekSudoku[satir][sutun] == 0){ 
-                for (int sayi = 1; sayi <= 9; sayi++){
-                    if (sudokuKontrol(cozulecekSudoku,satir,sutun,sayi) == 1){
-                        cozulecekSudoku[satir][sutun] = sayi;
-                        if (sudokuCoz(cozulecekSudoku) == 1){
+            if (sudokuUretilen[satir][sutun] == 0){ 
+                for (int denenenSayi = 1; denenenSayi <= 9; denenenSayi++){
+                    if (sudokuKontrol(sudokuUretilen,satir,sutun,denenenSayi) == 1){
+                        sudokuUretilen[satir][sutun] = denenenSayi;
+                        if (sudokuCoz(sudokuUretilen) == 1){
                             return 1;
                         }
-                        cozulecekSudoku[satir][sutun] = 0;
+                        sudokuUretilen[satir][sutun] = 0;
                     }
                 } return 0;
                 
@@ -123,14 +123,12 @@ void sudokuUret(int sudokuUretilen[9][9]){
     }
     
 
-    sudokuCoz(sudokuUretilen);
+    if(sudokuCoz(sudokuUretilen) == 1){
+        int silinecekSayi = 45;
+        int silinenSayi = 0;
 
-
-    int silinecekSayi = 45;
-    int silinenSayi = 0;
-
-    while (silinenSayi < silinecekSayi)
-    {
+        while (silinenSayi < silinecekSayi)
+        {
         int satir = rand() % 9;
         int sutun = rand() % 9;
 
@@ -140,7 +138,13 @@ void sudokuUret(int sudokuUretilen[9][9]){
             silinenSayi++;
         }
         
+        }
+    }else {
+        printf("Uretilen sudoku cozulemedi. \n");
     }
+
+
+    
 }
 
 int main(){
@@ -165,7 +169,7 @@ int main(){
     islemSayisi = 0;
     sudokuYazdir(sudokuUretilen);
 
-    if (sudokuCoz(sudokuUretilen)) {
+    if (sudokuCoz(sudokuUretilen) == 1) {
         printf("Sudoku Başariyla Çözüldü:\n\n\n");
         sudokuYazdir(sudokuUretilen);
         printf("Toplam işlem sayisi: %d\n", islemSayisi);
