@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 int islemSayisi = 0;
 
@@ -94,9 +96,56 @@ int sudokuCoz(int cozulecekSudoku[9][9]){
     
 }
 
+void sudokuUret(int sudokuUretilen[9][9]){
+    for (int i = 0; i < 9; i++)
+    {
+        for (int j = 0; j < 9; j++)
+        {
+            sudokuUretilen[i][j] = 0;
+        }
+        
+    }
+
+    int sayilar[9] = {1,2,3,4,5,6,7,8,9};
+
+    for (int i = 0; i < 25; i++)
+    {
+        int a = rand() % 9;
+        int b = rand() % 9;
+        int gecicia = sayilar[a];
+        sayilar[a] = sayilar[b];
+        sayilar[b] = gecicia;
+    }
+    
+    for (int i = 0; i < 9; i++)
+    {
+        sudokuUretilen[0][i] = sayilar[i];
+    }
+    
+
+    sudokuCoz(sudokuUretilen);
+
+
+    int silinecekSayi = 45;
+    int silinenSayi = 0;
+
+    while (silinenSayi < silinecekSayi)
+    {
+        int satir = rand() % 9;
+        int sutun = rand() % 9;
+
+        if (sudokuUretilen[satir][sutun] != 0)
+        {
+            sudokuUretilen[satir][sutun] = 0;
+            silinenSayi++;
+        }
+        
+    }
+}
+
 int main(){
 
-    int cozulecekSudoku[9][9] = {
+/*    int cozulecekSudoku[9][9] = {
     {8, 7, 0,0,4,2,9,1,5},
     {1, 3, 0,5,0,8,0,2,0},
     {5, 0, 2,0,0,0,0,8,3},
@@ -107,15 +156,19 @@ int main(){
     {6, 0, 1,0,0,4,5,0,8},
     {0, 8, 0,2,0,0,0,0,4}
 
-};
+}; */  // eskiden sudokuyu hazır verirdik şimdi kod kendisi üretiyor artık o yüzden bu diziyi yoruma aldım.
 
-    sudokuYazdir(cozulecekSudoku);
+    srand(time(NULL));
+    int sudokuUretilen[9][9];
+
+    sudokuUret(sudokuUretilen);
     islemSayisi = 0;
+    sudokuYazdir(sudokuUretilen);
 
-    if (sudokuCoz(cozulecekSudoku)) {
+    if (sudokuCoz(sudokuUretilen)) {
         printf("Sudoku Başariyla Çözüldü:\n\n\n");
+        sudokuYazdir(sudokuUretilen);
         printf("Toplam işlem sayisi: %d\n", islemSayisi);
-        sudokuYazdir(cozulecekSudoku);
     }else {
         printf("Cozum bulunamadi. \n\n");
     }
