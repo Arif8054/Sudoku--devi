@@ -96,6 +96,35 @@ int sudokuCoz(int sudokuUretilen[9][9]){
     
 }
 
+int tekcozumsayac = 0;
+int tekCozum(int sudokuUretilen[9][9]){
+
+    if (tekcozumsayac == 2)
+    {
+        return 1;
+    }
+    
+
+    for (int satir = 0; satir < 9; satir++){
+        for (int sutun = 0; sutun < 9; sutun++){
+            if (sudokuUretilen[satir][sutun] == 0){ 
+                for (int denenenSayi = 1; denenenSayi <= 9; denenenSayi++){
+                    if (sudokuKontrol(sudokuUretilen,satir,sutun,denenenSayi) == 1){
+                        sudokuUretilen[satir][sutun] = denenenSayi;
+                        tekCozum(sudokuUretilen);
+                        sudokuUretilen[satir][sutun] = 0;
+
+                    }
+                } return 0;
+                
+            }
+            
+        }
+    tekcozumsayac++;    
+    }return 1;
+    
+}
+
 void sudokuUret(int sudokuUretilen[9][9]){
     for (int i = 0; i < 9; i++)
     {
@@ -176,6 +205,16 @@ int main(){
     }else {
         printf("Cozum bulunamadi. \n\n");
     }
+
+    tekCozum(sudokuUretilen);
+
+    if (tekcozumsayac == 2)
+    {
+        printf("\n\nSudokunun birden fazla çözümü vardir.\n");
+    }else {
+        printf("\n\nSudokunun tek çözümü vardir.\n");
+    }
+    
 
     return 0;
 }
